@@ -32,14 +32,13 @@ describe('OrderServiceClient', () => {
     jest.clearAllMocks();
   });
 
-  const mkResponse = <T>(data: T, status = 200): AxiosResponse<T> =>
-    ({
-      data,
-      status,
-      statusText: 'OK',
-      headers: {},
-      config: { headers: {} as never },
-    }) as unknown as AxiosResponse<T>;
+  const mkResponse = <T>(data: T, status = 200): AxiosResponse<T> => ({
+    data,
+    status,
+    statusText: 'OK',
+    headers: {},
+    config: { headers: {} as never },
+  });
 
   it('returns customer on 200', async () => {
     const customer: CustomerDto = {
@@ -126,7 +125,7 @@ describe('OrderServiceClient', () => {
     const result = await promise;
     expect(result).toBeInstanceOf(OrderServiceUnavailableError);
 
-    const allWarns = warnSpy.mock.calls.map((c) => String(c[0]));
+    const allWarns = warnSpy.mock.calls.map((c: unknown[]) => String(c[0]));
     expect(allWarns.length).toBe(4);
     for (const log of allWarns) {
       expect(log).not.toContain('52998224725');

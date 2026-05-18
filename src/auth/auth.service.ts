@@ -63,7 +63,9 @@ export class AuthService {
     private readonly requestCtx: RequestContextService,
     config: ConfigService,
   ) {
-    this.customerExpiresIn = config.getOrThrow<string>('JWT_CUSTOMER_EXPIRES_IN');
+    this.customerExpiresIn = config.getOrThrow<string>(
+      'JWT_CUSTOMER_EXPIRES_IN',
+    );
     this.adminExpiresIn = config.getOrThrow<string>('JWT_ADMIN_EXPIRES_IN');
   }
 
@@ -88,7 +90,10 @@ export class AuthService {
     const expiresIn = expiresInToSeconds(this.customerExpiresIn);
     const token = await this.jwt.signAsync(
       { sub: customer.id, role: 'CUSTOMER' as const },
-      { expiresIn: this.customerExpiresIn as `${number}${'s' | 'm' | 'h' | 'd'}` },
+      {
+        expiresIn: this
+          .customerExpiresIn as `${number}${'s' | 'm' | 'h' | 'd'}`,
+      },
     );
 
     this.requestCtx.set('user_id', customer.id);

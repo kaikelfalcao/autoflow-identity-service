@@ -30,9 +30,7 @@ async function run(): Promise<void> {
     await repo.save(existing);
     process.stdout.write(`Admin ${email} updated\n`);
   } else {
-    await repo.save(
-      repo.create({ email, name, passwordHash, active: true }),
-    );
+    await repo.save(repo.create({ email, name, passwordHash, active: true }));
     process.stdout.write(`Admin ${email} created\n`);
   }
 

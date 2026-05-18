@@ -24,7 +24,9 @@ describe('AdminRepository', () => {
     const admin = { id: 'x', email: 'a@b.c' } as Admin;
     typeormRepo.findOne.mockResolvedValue(admin);
     await expect(repo.findByEmail('a@b.c')).resolves.toBe(admin);
-    expect(typeormRepo.findOne).toHaveBeenCalledWith({ where: { email: 'a@b.c' } });
+    expect(typeormRepo.findOne).toHaveBeenCalledWith({
+      where: { email: 'a@b.c' },
+    });
   });
 
   it('findByEmail returns null when not found', async () => {

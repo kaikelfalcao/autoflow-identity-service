@@ -54,7 +54,9 @@ export class OrderServiceClient {
     this.baseUrl = config.getOrThrow<string>('ORDER_SERVICE_URL');
   }
 
-  async findCustomerByDocument(documentNumber: string): Promise<CustomerDto | null> {
+  async findCustomerByDocument(
+    documentNumber: string,
+  ): Promise<CustomerDto | null> {
     const masked = maskDocument(documentNumber);
     const url = `${this.baseUrl}/customers/by-document/${encodeURIComponent(documentNumber)}`;
 

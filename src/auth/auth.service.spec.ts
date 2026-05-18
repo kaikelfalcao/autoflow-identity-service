@@ -59,7 +59,9 @@ describe('AuthService', () => {
       });
       const result = await service.loginCustomer({ cpf: '529.982.247-25' });
       expect(result).toEqual({ token: 'signed.jwt.token', expiresIn: 3600 });
-      expect(orderClient.findCustomerByDocument).toHaveBeenCalledWith('52998224725');
+      expect(orderClient.findCustomerByDocument).toHaveBeenCalledWith(
+        '52998224725',
+      );
       expect(jwt.signAsync).toHaveBeenCalledWith(
         { sub: 'cust-1', role: 'CUSTOMER' },
         expect.objectContaining({ expiresIn: '1h' }),
@@ -74,7 +76,9 @@ describe('AuthService', () => {
         documentNumber: '52998224725',
       });
       await service.loginCustomer({ cpf: '52998224725' });
-      expect(orderClient.findCustomerByDocument).toHaveBeenCalledWith('52998224725');
+      expect(orderClient.findCustomerByDocument).toHaveBeenCalledWith(
+        '52998224725',
+      );
     });
 
     it('throws BadRequest for malformed CPF', async () => {
@@ -113,17 +117,16 @@ describe('AuthService', () => {
   });
 
   describe('loginAdmin', () => {
-    const buildAdmin = (overrides?: Partial<Admin>): Admin =>
-      ({
-        id: 'a1',
-        email: 'admin@x.com',
-        passwordHash: 'hash',
-        name: 'Adm',
-        active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ...overrides,
-      }) as Admin;
+    const buildAdmin = (overrides?: Partial<Admin>): Admin => ({
+      id: 'a1',
+      email: 'admin@x.com',
+      passwordHash: 'hash',
+      name: 'Adm',
+      active: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...overrides,
+    });
 
     it('returns token for valid credentials', async () => {
       const admin = buildAdmin();

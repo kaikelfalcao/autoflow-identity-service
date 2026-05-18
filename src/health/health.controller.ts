@@ -30,7 +30,9 @@ export class HealthController {
     const postgres = await this.checkPostgres();
     const orderService = await this.checkOrderService();
     const status: 'ok' | 'degraded' =
-      postgres === 'connected' && orderService === 'reachable' ? 'ok' : 'degraded';
+      postgres === 'connected' && orderService === 'reachable'
+        ? 'ok'
+        : 'degraded';
     return {
       status,
       postgres,

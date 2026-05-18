@@ -55,9 +55,10 @@ export class CanonicalLogInterceptor implements NestInterceptor {
     } | null;
     const status = err ? (errObj?.status ?? 500) : res.statusCode;
     const level = status >= 500 ? 'error' : status >= 400 ? 'warn' : 'info';
-    const path = (req as Request & { route?: { path?: string } }).route?.path
-      ?? req.path
-      ?? req.url;
+    const route = (req as unknown as { route?: { path?: string } }).route;
+    const routePath: string | undefined =
+      typeof route?.path === 'string' ? route.path : undefined;
+    const path: string = routePath ?? req.path ?? req.url;
 
     const accrued = this.requestCtx.snapshot();
     delete accrued.request_id;
@@ -74,7 +75,9 @@ export class CanonicalLogInterceptor implements NestInterceptor {
         ? {
             error: {
               type: errObj?.name ?? 'Error',
-              message: errObj?.message ?? String(err),
+              message:
+                errObj?.message ??
+                (typeof err === 'string' ? err : JSON.stringify(err)),
               code: errObj?.code,
             },
           }

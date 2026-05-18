@@ -13,7 +13,9 @@ describe('HealthController', () => {
   beforeEach(() => {
     dataSource = { query: jest.fn() };
     http = { get: jest.fn() };
-    const config = { getOrThrow: jest.fn().mockReturnValue('http://order:3001') };
+    const config = {
+      getOrThrow: jest.fn().mockReturnValue('http://order:3001'),
+    };
     controller = new HealthController(
       dataSource as unknown as DataSource,
       http as unknown as HttpService,

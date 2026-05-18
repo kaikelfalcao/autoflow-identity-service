@@ -9,7 +9,10 @@ import { HttpExceptionFilter } from './http-exception.filter';
 
 describe('HttpExceptionFilter', () => {
   let filter: HttpExceptionFilter;
-  let response: { status: jest.Mock; json: jest.Mock };
+  let response: {
+    status: jest.Mock;
+    json: jest.Mock<unknown, [Record<string, unknown>]>;
+  };
   let request: { url: string; headers: Record<string, string> };
   let host: Partial<ArgumentsHost>;
 
@@ -17,7 +20,7 @@ describe('HttpExceptionFilter', () => {
     filter = new HttpExceptionFilter();
     response = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      json: jest.fn() as jest.Mock<unknown, [Record<string, unknown>]>,
     };
     request = { url: '/auth/login', headers: { 'x-correlation-id': 'cid-1' } };
     host = {
@@ -40,10 +43,7 @@ describe('HttpExceptionFilter', () => {
   });
 
   it('maps OrderServiceUnavailableError to 503', () => {
-    filter.catch(
-      new OrderServiceUnavailableError(),
-      host as ArgumentsHost,
-    );
+    filter.catch(new OrderServiceUnavailableError(), host as ArgumentsHost);
     expect(response.status).toHaveBeenCalledWith(503);
   });
 
@@ -54,7 +54,11 @@ describe('HttpExceptionFilter', () => {
 
   it('includes correlationId in response body', () => {
     filter.catch(new UnauthorizedException(), host as ArgumentsHost);
-    const body = response.json.mock.calls[0][0];
+    const body = response.json.mock.calls[0][0] as {
+      correlationId: string;
+      path: string;
+      statusCode: number;
+    };
     expect(body.correlationId).toBe('cid-1');
     expect(body.path).toBe('/auth/login');
     expect(body.statusCode).toBe(401);

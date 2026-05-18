@@ -29,6 +29,9 @@ describe('CorrelationIdMiddleware', () => {
     req.headers = { 'x-correlation-id': 'incoming-id' };
     middleware.use(req as Request, res as unknown as Response, next);
     expect(req.headers['x-correlation-id']).toBe('incoming-id');
-    expect(res.setHeader).toHaveBeenCalledWith('x-correlation-id', 'incoming-id');
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'x-correlation-id',
+      'incoming-id',
+    );
   });
 });

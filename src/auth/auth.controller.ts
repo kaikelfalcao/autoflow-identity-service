@@ -30,7 +30,10 @@ export class AuthController {
   @ApiOperation({ summary: 'Login de Customer via CPF' })
   @ApiResponse({ status: 200, type: TokenResponseDto })
   @ApiResponse({ status: 400, description: 'CPF inválido' })
-  @ApiResponse({ status: 401, description: 'Cliente não encontrado ou inativo' })
+  @ApiResponse({
+    status: 401,
+    description: 'Cliente não encontrado ou inativo',
+  })
   @ApiResponse({ status: 503, description: 'order-service indisponível' })
   loginCustomer(@Body() dto: CustomerLoginDto): Promise<TokenResponseDto> {
     return this.authService.loginCustomer(dto);
@@ -51,7 +54,9 @@ export class AuthController {
   @ApiOperation({ summary: 'Verifica token JWT (usado pelo Kong)' })
   @ApiResponse({ status: 200, description: 'Claims do token' })
   @ApiResponse({ status: 401, description: 'Token inválido ou expirado' })
-  async verify(@Headers('authorization') authHeader?: string): Promise<JwtPayload> {
+  async verify(
+    @Headers('authorization') authHeader?: string,
+  ): Promise<JwtPayload> {
     if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
       throw new UnauthorizedException('Token ausente');
     }
