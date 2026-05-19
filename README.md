@@ -118,7 +118,7 @@ npm run test:cov       # threshold 80% global
 npm run lint           # ESLint (TS strict)
 ```
 
-> **TODO:** SonarQube Community Edition (self-hosted) — atualmente o gate é apenas o threshold do Jest.
+> **Análise estática:** CodeQL via GitHub Actions (`.github/workflows/codeQL.yml`) — varredura de segurança em pushes na `main` e em pull requests. O gate de cobertura continua sendo o threshold do Jest.
 
 ---
 
