@@ -1,0 +1,22 @@
+# Cria o admin default a partir das envs SEED_ADMIN_*.
+# Idempotente — upsert por email.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: identity-seed-admin
+  namespace: autoflow
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: seed
+          image: kaikelfalcao/autoflow-identity:latest
+          command:
+            - node
+            - dist/database/seeds/admin.seed.js
+          envFrom:
+            - secretRef:
+                name: identity-secrets
