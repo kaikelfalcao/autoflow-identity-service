@@ -4,7 +4,7 @@ name: CD
 # Os jobs filtram por main + event=push para garantir CD apenas em merges para a default branch.
 on:
   workflow_run:
-    workflows: [CI]
+    workflows: [Build]
     types: [completed]
 
 env:
